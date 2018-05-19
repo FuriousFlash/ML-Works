@@ -13,12 +13,21 @@ n = size(X, 2);
 
 % You need to return the following variables correctly 
 all_theta = zeros(num_labels, n + 1);
-
+thetadash = all_theta';
 % Add ones to the X data matrix
 X = [ones(m, 1) X];
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: You should complete the following code to train num_labels
+thet = [];
+for i=1:num_labels,
+% Set options for fminunc
+  options = optimset('GradObj', 'on', 'MaxIter', 50);
+  c = i;
+% Run fmincg to obtain the optimal theta
+% This function will return theta and the cost 
+  [theta] = fmincg (@(t)(lrCostFunction(t, X, y == c, lambda)), thetadash(:,i), options);
+  thet = [thet theta];
+end;
+all_theta = thet';              
+%  Instructions: You should complete the following code to train num_labels
 %               logistic regression classifiers with regularization
 %               parameter lambda. 
 %
